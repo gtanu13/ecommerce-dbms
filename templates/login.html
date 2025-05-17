@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | TechNest</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #1f2937;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: xx-large;
+    }
+
+    .auth-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .auth-container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .form-title {
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-align: center;
+      color: #333;
+    }
+
+    .form-box {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-box input:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    .form-box input::placeholder {
+      color: #999;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background-color: #4a90e2;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #357ab8;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .switch-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .switch-link a {
+      color: #4a90e2;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+
+    footer.footer-simple {
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Error message styling */
+    .error-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4444;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(200%);
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+    }
+
+    .error-message.show {
+      transform: translateX(0);
+    }
+
+    .error-message i {
+      font-size: 20px;
+    }
+
+    .error-message .close-btn {
+      margin-left: 15px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Animation for shake effect */
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      10%,
+      30%,
+      50%,
+      70%,
+      90% {
+        transform: translateX(-5px);
+      }
+
+      20%,
+      40%,
+      60%,
+      80% {
+        transform: translateX(5px);
+      }
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <header>
+    <h1 class="brand"><img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="TechNest Logo" width="50px">
+      TechNest®</h1>
+  </header>
+
+  <!-- Error message container (hidden by default) -->
+  <div id="errorMessage" class="error-message">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorText">Invalid credentials. Please try again.</span>
+    <button class="close-btn" onclick="hideError()">&times;</button>
+  </div>
+
+  <main class="auth-section">
+    <div class="auth-container">
+      <h2 class="form-title">🔐 Login to Your Account</h2>
+      <form method="POST" class="form-box" id="loginForm">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+      <p class="switch-link">Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+  </main>
+
+  <footer class="footer-simple">
+    <p>&copy; 2025 TechNest. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Show error message if there's an error in the URL
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+
+      if (error) {
+        showError(error);
+        // Add shake effect to the form
+        document.getElementById('loginForm').classList.add('shake');
+        // Remove shake class after animation completes
+        setTimeout(() => {
+          document.getElementById('loginForm').classList.remove('shake');
+        }, 500);
+      }
+    });
+
+    function showError(message) {
+      const errorElement = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+
+      errorText.textContent = message || 'Invalid credentials. Please try again.';
+      errorElement.classList.add('show');
+
+      // Auto-hide after 5 seconds
+      setTimeout(hideError, 5000);
+    }
+
+    function hideError() {
+      document.getElementById('errorMessage').classList.remove('show');
+    }
+  </script>
+</body>
+
+</html>

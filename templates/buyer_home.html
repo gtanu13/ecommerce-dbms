@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TechNest - Your Ultimate Online Electronics & Lifestyle Store">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <title>TechNest | Shop Electronics</title>
+  <style>
+    .header-row {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/images/img.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      height: 100px;
+      padding: 0 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5em;
+    }
+
+    .main-menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .main-menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .main-menu .username-display {
+      color: #ffcc00;
+    }
+
+    #theme-toggle-button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+
+    .dark-mode .header-row {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('static/images/img.png');
+      background-size: cover;
+      background-position: center;
+      color: #f5f5f5;
+    }
+
+    .marquee {
+      position: relative;
+      margin-top: 110px;
+      overflow: hidden;
+      background-color: #333;
+      color: #FF5733;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+      padding: 5px 0;
+    }
+
+    .marquee span {
+      display: inline-block;
+      animation: scroll 10s linear infinite;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .dark-mode .marquee {
+      background-color: #444;
+    }
+
+    .search-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 2px solid orange;
+    }
+
+    .dark-mode .search-container input {
+      border: 2px solid orange;
+    }
+
+    .product-section {
+      background: linear-gradient(to bottom, #f3f3f3, #ffffff);
+      padding: 20px;
+    }
+
+    .dark-mode .product-section {
+      background: #000;
+      color: #f5f5f5;
+    }
+
+    .featured-banner {
+      text-align: center;
+      background-color: #FF5733;
+      color: white;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      font-weight: bold;
+      border-radius: 10px;
+    }
+
+    .dark-mode .featured-banner {
+      background-color: #333;
+      color: #f5f5f5;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .product-card {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dark-mode .product-card {
+      background-color: #1f1f1f;
+      border: 1px solid #444;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-image-container {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .image-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 10;
+    }
+
+    .product-image-container:hover .image-nav {
+      opacity: 1;
+    }
+
+    .image-nav.prev {
+      left: 10px;
+    }
+
+    .image-nav.next {
+      right: 10px;
+    }
+
+    .product-card h2 {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .dark-mode .product-card h2 {
+      color: #f5f5f5;
+    }
+
+    .product-card p.description {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .dark-mode .product-card p.description {
+      color: #ccc;
+    }
+
+    .product-card p.price {
+      font-size: 1.2em;
+      color: #FF5733;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .product-card .btn-primary {
+      background-color: #FF5733;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .product-card .btn-primary:hover {
+      background-color: #e14b29;
+    }
+
+    .product-card .btn-primary.added {
+      background-color: #4CAF50;
+    }
+
+    .product-card .btn-primary.loading {
+      background-color: #FFA500;
+      position: relative;
+    }
+
+    .product-card .btn-primary.loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      right: 20px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background-color: #4CAF50;
+    }
+
+    .toast.error {
+      background-color: #F44336;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header-row">
+    <h1 class="brand">
+      <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="TechNest Logo" width="50px"> TechNest®
+    </h1>
+    <nav class="main-menu">
+      <a href="/">Home</a>
+      <a href="/orders">Orders</a>
+      <a href="/cart">Cart 🛒 <span class="cart-count" id="cart-count">0</span></a>
+      <a href="/logout">Logout</a>
+      <span class="username-display">Welcome, {{ session.username }}</span>
+      <button id="theme-toggle-button">🌙 Dark Mode</button>
+    </nav>
+  </header>
+
+  <div class="marquee">
+    <span>🎉 Exclusive Deal: Get 20% Off on First Purchase | Free Delivery on Orders Above ₹999</span>
+  </div>
+
+  <div class="search-container">
+    <input type="text" placeholder="Search products..." id="search-bar">
+  </div>
+
+  <main class="product-section">
+    <div class="featured-banner">Featured Products</div>
+    <div class="product-grid">
+      {% for product in products %}
+      <div class="product-card">
+        <div class="product-image-container">
+          {% set images = product.image.split(',') %}
+          <img src="{{ url_for('static', filename='images/' + images[0]) }}" alt="{{ product.name }}"
+            data-images="{{ product.image }}" data-current="0">
+          <button class="image-nav prev" onclick="navigateImage(this, -1)">❮</button>
+          <button class="image-nav next" onclick="navigateImage(this, 1)">❯</button>
+        </div>
+        <h2>{{ product.name|upper }}</h2>
+        <p class="description">{{ product.description }}</p>
+        <p class="price">₹{{ product.price }}</p>
+        <form method="post" action="/add_to_cart" class="add-to-cart-form">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <button class="btn-primary" type="submit">
+            <span class="btn-text">Add to Cart</span>
+          </button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 TechNest. All Rights Reserved.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Theme toggle
+    document.getElementById('theme-toggle-button').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      const button = document.getElementById('theme-toggle-button');
+      button.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // Check for saved theme preference
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('theme-toggle-button').textContent = '☀️ Light Mode';
+    }
+
+    // Search functionality
+    document.getElementById('search-bar').addEventListener('input', function () {
+      let query = this.value.toLowerCase();
+      let products = document.querySelectorAll('.product-card');
+      products.forEach(product => {
+        let productName = product.querySelector('h2').textContent.toLowerCase();
+        let description = product.querySelector('.description').textContent.toLowerCase();
+        product.style.display = (productName.includes(query) || description.includes(query)) ? 'block' : 'none';
+      });
+    });
+
+    // Image navigation functionality
+    function navigateImage(button, direction) {
+      const container = button.closest('.product-image-container');
+      const img = container.querySelector('img');
+      const images = img.dataset.images.split(',');
+      let currentIndex = parseInt(img.dataset.current);
+
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = images.length - 1;
+      else if (currentIndex >= images.length) currentIndex = 0;
+
+      img.src = "{{ url_for('static', filename='images/') }}" + images[currentIndex];
+      img.dataset.current = currentIndex;
+    }
+
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const button = this.querySelector('.btn-primary');
+        const buttonText = button.querySelector('.btn-text');
+        const originalText = buttonText.textContent;
+        const productId = this.querySelector('input[name="product_id"]').value;
+
+        button.classList.add('loading');
+        buttonText.textContent = 'Adding...';
+        button.disabled = true;
+
+        try {
+          const response = await fetch('/add_to_cart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `product_id=${productId}`
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            updateCartCount(data.cart_count);
+            button.classList.remove('loading');
+            button.classList.add('added');
+            buttonText.textContent = '✓ Added';
+            showToast('Item added to cart!', 'success');
+            setTimeout(() => {
+              button.classList.remove('added');
+              buttonText.textContent = originalText;
+              button.disabled = false;
+            }, 2000);
+          } else {
+            handleCartError(button, buttonText, originalText, data.message);
+          }
+        } catch (error) {
+          handleCartError(button, buttonText, originalText, 'Network error. Please try again.');
+        }
+      });
+    });
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Update cart count display
+    function updateCartCount(count) {
+      document.getElementById('cart-count').textContent = count;
+      // Update session cart count in case we need it elsewhere
+      fetch('/update_session_cart_count', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ count: count })
+      });
+    }
+
+    // Handle cart errors
+    function handleCartError(button, buttonText, originalText, message) {
+      button.classList.remove('loading');
+      buttonText.textContent = originalText;
+      button.disabled = false;
+      showToast(message || 'Failed to add to cart', 'error');
+    }
+
+    // Fetch initial cart count on page load
+    async function fetchCartCount() {
+      try {
+        const response = await fetch('/get_cart_count');
+        if (response.ok) {
+          const data = await response.json();
+          updateCartCount(data.cart_count);
+        }
+      } catch (error) {
+        console.error('Error fetching cart count:', error);
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchCartCount();
+    });
+  </script>
+</body>
+
+</html>

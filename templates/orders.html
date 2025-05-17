@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Your Orders | TechNest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #f59e0b;
+      --secondary-dark: #d97706;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --gray: #64748b;
+      --light-gray: #e2e8f0;
+      --danger: #ef4444;
+      --success: #10b981;
+      --border-radius: 0.5rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f1f5f9;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--dark);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--secondary);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav ul li a:hover {
+      color: var(--secondary);
+    }
+
+    .cart-count {
+      background-color: var(--secondary);
+      color: var(--dark);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .main-content {
+      padding: 2rem 0;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: var(--dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 4rem;
+      height: 0.25rem;
+      background-color: var(--secondary);
+      border-radius: 0.25rem;
+    }
+
+    .orders-container {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .order-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .order-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background-color: var(--light);
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .order-info-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 120px;
+    }
+
+    .order-info-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 0.25rem;
+    }
+
+    .order-info-value {
+      font-weight: 600;
+    }
+
+    .order-status {
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .status-pending {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+
+    .status-processing {
+      background-color: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-shipped {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-delivered {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .status-cancelled {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-paid {
+      background-color: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .order-items {
+      padding: 1.5rem;
+    }
+
+    .order-item {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--light-gray);
+      transition: var(--transition);
+    }
+
+    .order-item:hover {
+      background-color: rgba(241, 245, 249, 0.5);
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+    }
+
+    .order-item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      padding: 0.5rem;
+      background-color: white;
+      transition: var(--transition);
+    }
+
+    .order-item:hover .order-item-image {
+      transform: scale(1.05);
+      box-shadow: var(--shadow);
+    }
+
+    .order-item-details {
+      flex: 1;
+    }
+
+    .order-item-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--dark);
+    }
+
+    .order-item-price {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .order-item-quantity {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background-color: var(--light-gray);
+      border-radius: 0.25rem;
+    }
+
+    .order-item-total {
+      font-weight: 600;
+      color: var(--success);
+      margin-top: 0.5rem;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--light-gray);
+      background-color: var(--light);
+    }
+
+    .order-total {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .order-total-amount {
+      color: var(--primary);
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 3rem;
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .empty-orders-icon {
+      font-size: 3rem;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .empty-orders h3 {
+      font-size: 1.5rem;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--secondary-dark);
+    }
+
+    .toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 1rem 1.5rem;
+      background-color: var(--success);
+      color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background-color: var(--success);
+    }
+
+    .toast.error {
+      background-color: var(--danger);
+    }
+
+    @media (max-width: 768px) {
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .order-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+      }
+
+      .order-info-item {
+        width: 100%;
+      }
+
+      .order-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .order-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .order-item {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .order-item-image {
+        width: 100%;
+        height: auto;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="/" class="logo">Tech<span>Nest</span></a>
+      <nav>
+        <ul>
+          <li><a href="/buyer"><i class="fas fa-store"></i> Shop</a></li>
+          <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Cart <span
+                class="cart-count">{{ session.get('cart_count', 0) }}</span></a></li>
+          <li><a href="/profile"><i class="fas fa-user"></i> Account</a></li>
+          <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content container">
+    <h1 class="page-title">Your Orders</h1>
+
+    {% if not orders %}
+    <div class="empty-orders">
+      <div class="empty-orders-icon">
+        <i class="fas fa-box-open"></i>
+      </div>
+      <h3>You haven't placed any orders yet</h3>
+      <a href="/buyer" class="btn btn-secondary">
+        <i class="fas fa-store"></i> Start Shopping
+      </a>
+    </div>
+    {% else %}
+    <div class="orders-container">
+      {% for order in orders %}
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-info">
+            <div class="order-info-item">
+              <span class="order-info-label">Order Placed</span>
+              <span class="order-info-value">{{ order.created_at.strftime('%d %b %Y') }}</span>
+            </div>
+            <div class="order-info-item">
+              <span class="order-info-label">Order #</span>
+              <span class="order-info-value">{{ order.id }}</span>
+            </div>
+            <div class="order-info-item">
+              <span class="order-info-label">Total</span>
+              <span class="order-info-value">₹{{ "%.2f"|format(order.price * order.quantity) }}</span>
+            </div>
+          </div>
+          <div class="order-status status-{{ order.payment_status }}">
+            {{ order.payment_status|capitalize }}
+          </div>
+        </div>
+
+        <div class="order-items">
+          <div class="order-item">
+            <img src="{{ url_for('static', filename='images/' + order.image.split(',')[0]) }}" alt="{{ order.name }}"
+              class="order-item-image">
+            <div class="order-item-details">
+              <h3 class="order-item-name">{{ order.name }}</h3>
+              <p class="order-item-price">₹{{ "%.2f"|format(order.price) }}</p>
+              <p class="order-item-quantity">Quantity: {{ order.quantity }}</p>
+              <p class="order-item-total">Total: ₹{{ "%.2f"|format(order.price * order.quantity) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-footer">
+          <div class="order-total">
+            Order Total: <span class="order-total-amount">₹{{ "%.2f"|format(order.price * order.quantity) }}</span>
+          </div>
+          <div class="order-actions">
+            <button class="btn btn-outline" onclick="buyAgain('{{ order.product_id }}')">
+              <i class="fas fa-redo"></i> Buy Again
+            </button>
+            <button class="btn btn-primary" onclick="trackOrder('{{ order.id }}')">
+              <i class="fas fa-truck"></i> Track Order
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Check for flash messages
+      {% with messages = get_flashed_messages(with_categories = true) %}
+      {% if messages %}
+      const toast = document.createElement('div');
+      toast.className = 'toast show {% if messages[0][0] %}{{ messages[0][0] }}{% else %}success{% endif %}';
+      toast.innerHTML = `
+            <i class="fas fa-{% if messages[0][0] == 'error' %}times-circle{% else %}check-circle{% endif %}"></i> 
+            {% for category, message in messages %}
+              {{ message }}
+            {% endfor %}
+          `;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+      {% endif %}
+      {% endwith %}
+    });
+
+    function buyAgain(productId) {
+      // Add product to cart
+      fetch('/add_to_cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `product_id=${productId}`
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update cart count
+            document.querySelector('.cart-count').textContent = data.cart_count;
+
+            // Show success toast
+            const toast = document.createElement('div');
+            toast.className = 'toast show success';
+            toast.innerHTML = `
+            <i class="fas fa-check-circle"></i> 
+            Product added to cart
+          `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+              toast.remove();
+            }, 3000);
+          }
+        });
+    }
+
+    function trackOrder(orderId) {
+      // In a real app, this would redirect to order tracking
+      alert(`Tracking order #${orderId}`);
+    }
+  </script>
+</body>
+
+</html>

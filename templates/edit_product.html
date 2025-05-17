@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | TechNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #3f37c9;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --danger-color: #e63946;
+            --success-color: #2a9d8f;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .edit-container {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .edit-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .image-upload-section {
+            margin-bottom: 30px;
+        }
+
+        .image-upload-label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .image-preview {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .delete-image-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .image-preview:hover .delete-image-btn {
+            opacity: 1;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--medium-gray);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            background-color: var(--dark-gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #c53030;
+        }
+
+        @media (max-width: 768px) {
+            .edit-container {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">TechNest</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="edit-container">
+            <h1 class="edit-title">Edit Product</h1>
+
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" id="deleted_images" name="deleted_images" value="">
+
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name"
+                        value="{{ product.name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                        placeholder="Enter product description" required>{{ product.description }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Enter price"
+                        step="0.01" value="{{ product.price }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" placeholder="Enter category"
+                        value="{{ product.category }}" required>
+                </div>
+
+                <div class="image-upload-section">
+                    <label class="image-upload-label">Product Images</label>
+
+                    <div class="image-preview-container">
+                        {% if product.images %}
+                        {% for image in product.images %}
+                        <div class="image-preview">
+                            <img src="{{ url_for('static', filename='images/' + image) }}" alt="Product Image">
+                            <button type="button" class="delete-image-btn"
+                                onclick="deleteExistingImage('{{ image }}', this)">×</button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <label for="image-upload" class="upload-area">
+                        <div class="upload-icon">+</div>
+                        <div class="upload-text">Upload Images</div>
+                        <div class="upload-hint">Click to browse or drag and drop</div>
+                    </label>
+                    <input type="file" id="image-upload" name="images" accept="image/*" multiple
+                        onchange="previewUploadedImages(event)">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="window.location.href='/seller'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function previewUploadedImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.querySelector('.image-preview-container');
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'image-preview';
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-image-btn';
+                    deleteBtn.innerHTML = '×';
+                    deleteBtn.onclick = function () {
+                        previewDiv.remove();
+                        removeFileFromFileList(event.target, i);
+                    };
+
+                    previewDiv.appendChild(img);
+                    previewDiv.appendChild(deleteBtn);
+                    previewContainer.appendChild(previewDiv);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        function removeFileFromFileList(input, index) {
+            const files = Array.from(input.files);
+            files.splice(index, 1);
+
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+        }
+
+        function deleteExistingImage(imageName, button) {
+            // Add to deleted images hidden field
+            const deletedInput = document.getElementById('deleted_images');
+            let deleted = deletedInput.value ? deletedInput.value.split(',') : [];
+
+            if (!deleted.includes(imageName)) {
+                deleted.push(imageName);
+                deletedInput.value = deleted.join(',');
+            }
+
+            // Remove the preview
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+
+</html>

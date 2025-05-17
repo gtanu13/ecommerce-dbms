@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | TechNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border-radius: 0.8rem;
+            --shadow: 0 4px 12px -1px rgba(0, 0, 0, 0.1), 0 2px 8px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--dark);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .cart-count {
+            background-color: var(--secondary);
+            color: var(--dark);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 0.3rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 5rem;
+            height: 0.3rem;
+            background-color: var(--secondary);
+            border-radius: 0.25rem;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 992px) {
+            .checkout-container {
+                grid-template-columns: 1.5fr 1fr;
+            }
+        }
+
+        .checkout-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .checkout-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .section-title i {
+            color: var(--primary);
+            font-size: 1.2em;
+        }
+
+        .address-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+
+        @media (min-width: 768px) {
+            .address-form {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .address-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .saved-addresses {
+            margin-top: 2rem;
+        }
+
+        .saved-addresses h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .address-card {
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .address-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .address-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .address-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.6rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .address-card p {
+            color: var(--gray);
+            font-size: 0.92rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.5;
+        }
+
+        .address-card .default-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            border-bottom-left-radius: var(--border-radius);
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .address-actions button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .set-default-btn {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .set-default-btn:hover {
+            background-color: var(--gray);
+            color: white;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            padding: 1rem 1.8rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        }
+
+        .order-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.8rem;
+            padding-right: 0.5rem;
+        }
+
+        .order-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .order-items::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 10px;
+        }
+
+        .order-items::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1.2rem;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            align-items: center;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-image {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--light-gray);
+            padding: 0.8rem;
+            background-color: white;
+            flex-shrink: 0;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .order-item-price {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+        }
+
+        .order-item-quantity {
+            color: var(--gray);
+            font-size: 0.92rem;
+        }
+
+        .order-totals {
+            border-top: 1px solid var(--light-gray);
+            padding-top: 1.8rem;
+        }
+
+        .order-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.9rem;
+            font-size: 0.98rem;
+        }
+
+        .order-total-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .order-total-label {
+            color: var(--gray);
+        }
+
+        .order-total-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .grand-total .order-total-label {
+            font-size: 1.1rem;
+        }
+
+        .grand-total .order-total-value {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1.2rem 1.8rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            color: white;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: var(--success);
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        .toast i {
+            font-size: 1.4rem;
+        }
+
+        /* New address form animation */
+        #new-address-form {
+            display: none;
+            margin-top: 1.8rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .checkout-section {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .btn {
+                padding: 0.9rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="/" class="logo">
+                <i class="fas fa-laptop-code"></i> Tech<span>Nest</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="/buyer"><i class="fas fa-store"></i> Shop</a></li>
+                    <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Cart <span
+                                class="cart-count">{{ session.get('cart_count', 0) }}</span></a></li>
+                    <li><a href="/profile"><i class="fas fa-user"></i> Account</a></li>
+                    <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <h1 class="page-title">Complete Your Order</h1>
+
+        <div class="checkout-container">
+            <div class="checkout-section">
+                <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> Delivery Information</h2>
+
+                <div class="saved-addresses">
+                    {% if addresses %}
+                    <h3>Your Saved Addresses</h3>
+                    {% for address in addresses %}
+                    <div class="address-card {% if address.is_default %}selected{% endif %}"
+                        data-address-id="{{ address.id }}">
+                        {% if address.is_default %}
+                        <span class="default-badge">Default</span>
+                        {% endif %}
+                        <h4>{{ address.full_name }}</h4>
+                        <p>{{ address.address }}</p>
+                        <p>{{ address.city }}, {{ address.state }} - {{ address.pincode }}</p>
+                        <p><i class="fas fa-phone"></i> {{ address.phone }}</p>
+                        <div class="address-actions">
+                            {% if not address.is_default %}
+                            <button class="set-default-btn" onclick="setDefaultAddress({{ address.id }})">
+                                <i class="fas fa-star"></i> Set as Default
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p>You don't have any saved addresses yet.</p>
+                    {% endif %}
+                </div>
+
+                <button class="btn btn-secondary" id="add-new-address-btn">
+                    <i class="fas fa-plus"></i> Add New Address
+                </button>
+
+                <div id="new-address-form">
+                    <form class="address-form" id="address-form">
+                        <div class="form-group">
+                            <label for="full-name">Full Name</label>
+                            <input type="text" id="full-name" name="full_name" required
+                                placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Full Address</label>
+                            <textarea id="address" name="address" required
+                                placeholder="Enter your complete address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required placeholder="Enter your city">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select id="state" name="state" required>
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" id="pincode" name="pincode" required placeholder="Enter pincode">
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="set-default" name="is_default">
+                                <label for="set-default">Set as my default address</label>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <button type="button" class="btn btn-primary" id="save-address-btn">
+                                <i class="fas fa-save"></i> Save Address
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <h2 class="section-title"><i class="fas fa-receipt"></i> Order Summary</h2>
+
+                <div class="order-items">
+                    {% for item in items %}
+                    <div class="order-item">
+                        <img src="{{ url_for('static', filename='images/' + item.image.split(',')[0]) }}"
+                            alt="{{ item.name }}" class="order-item-image">
+                        <div class="order-item-details">
+                            <h3 class="order-item-name">{{ item.name }}</h3>
+                            <p class="order-item-price">₹{{ "%.2f"|format(item.price) }}</p>
+                            <p class="order-item-quantity">Quantity: {{ item.quantity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="order-totals">
+                    <div class="order-total-row">
+                        <span class="order-total-label">Subtotal</span>
+                        <span class="order-total-value">₹{{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <div class="order-total-row">
+                        <span class="order-total-label">Shipping</span>
+                        <span class="order-total-value">Free</span>
+                    </div>
+                    <div class="order-total-row">
+                        <span class="order-total-label">Tax (18%)</span>
+                        <span class="order-total-value">₹{{ "%.2f"|format(total * 0.18) }}</span>
+                    </div>
+                    <div class="order-total-row grand-total">
+                        <span class="order-total-label">Total Amount</span>
+                        <span class="order-total-value">₹{{ "%.2f"|format(total * 1.18) }}</span>
+                    </div>
+                </div>
+
+                <form action="/process_payment" method="POST" id="payment-form">
+                    <input type="hidden" name="address_id" id="selected-address-id"
+                        value="{{ addresses[0].id if addresses else '' }}" required>
+                    <input type="hidden" name="total" value="{{ total * 1.18 }}">
+                    <button type="submit" class="btn btn-primary" id="place-order-btn">
+                        <i class="fas fa-lock"></i> Proceed to Payment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Address selection
+            const addressCards = document.querySelectorAll('.address-card');
+            addressCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const addressId = this.dataset.addressId;
+                    document.getElementById('selected-address-id').value = addressId;
+
+                    addressCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // Add new address toggle
+            const addNewAddressBtn = document.getElementById('add-new-address-btn');
+            const newAddressForm = document.getElementById('new-address-form');
+
+            addNewAddressBtn.addEventListener('click', function () {
+                const isHidden = newAddressForm.style.display === 'none';
+                newAddressForm.style.display = isHidden ? 'block' : 'none';
+                this.innerHTML = isHidden ?
+                    '<i class="fas fa-times"></i> Cancel' :
+                    '<i class="fas fa-plus"></i> Add New Address';
+            });
+
+            // Save new address
+            document.getElementById('save-address-btn').addEventListener('click', function () {
+                const formData = {
+                    full_name: document.getElementById('full-name').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    pincode: document.getElementById('pincode').value,
+                    is_default: document.getElementById('set-default').checked
+                };
+
+                // Validate form
+                let isValid = true;
+                for (const field in formData) {
+                    if (field !== 'is_default' && !formData[field]) {
+                        isValid = false;
+                        const input = document.getElementById(field.replace('_', '-'));
+                        input.style.borderColor = 'var(--danger)';
+                        setTimeout(() => {
+                            input.style.borderColor = 'var(--light-gray)';
+                        }, 2000);
+                    }
+                }
+
+                if (!isValid) {
+                    showToast('Please fill all required fields', 'error');
+                    return;
+                }
+
+                fetch('/save_address', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('Address saved successfully', 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            showToast(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showToast('Error saving address', 'error');
+                        console.error('Error:', error);
+                    });
+            });
+
+            // Form submission validation
+            document.getElementById('payment-form').addEventListener('submit', function (e) {
+                if (!document.getElementById('selected-address-id').value) {
+                    e.preventDefault();
+                    showToast('Please select a delivery address', 'error');
+                    document.getElementById('add-new-address-btn').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            // Toast notification
+            function showToast(message, type) {
+                const toast = document.getElementById('toast');
+                toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+                toast.className = `toast ${type} show`;
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            // Check for flash messages
+            {% with messages = get_flashed_messages(with_categories = true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            showToast("{{ message }}", "{{ category }}");
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        });
+
+        function setDefaultAddress(addressId) {
+            fetch('/set_default_address', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ address_id: addressId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('Default address updated', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('Error updating address', 'error');
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Payment | TechNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border-radius: 0.5rem;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .payment-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .payment-header {
+            margin-bottom: 2rem;
+        }
+
+        .payment-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .payment-header p {
+            color: var(--gray);
+        }
+
+        .qr-code-container {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .qr-code {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .upi-details {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+        }
+
+        .upi-id {
+            font-weight: 600;
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+
+        .payment-status {
+            margin: 2rem 0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .payment-status.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            display: block;
+        }
+
+        .payment-status i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>Complete Your Payment</h1>
+            <p>Scan the QR code below using any UPI app to complete your purchase</p>
+        </div>
+
+        <div class="timer" id="payment-timer">05:00</div>
+
+        <div class="qr-code-container">
+            <img src="{{ url_for('static', filename='images/qr.jpg') }}" alt="UPI QR Code" class="qr-code">
+            <div class="upi-details">
+                <p>Scan this QR code with any UPI app</p>
+                <p class="upi-id">UPI ID: technest@okhdfcbank</p>
+                <p>Amount: ₹{{ "%.2f"|format(total) }}</p>
+                <p>Note: Please enter the exact amount shown above</p>
+            </div>
+        </div>
+
+        <div class="payment-status" id="payment-status">
+            <i class="fas fa-check-circle"></i>
+            <h2>Payment Confirmed!</h2>
+            <p>Your order has been placed successfully.</p>
+            <p>You will be redirected to the orders page shortly.</p>
+        </div>
+
+        <button class="btn btn-secondary" id="cancel-btn">
+            <i class="fas fa-times"></i> Cancel Payment
+        </button>
+    </div>
+
+    <script>
+        const paymentId = "{{ payment_id }}";
+        const totalTime = 5 * 60; // 5 minutes in seconds
+        let timeLeft = totalTime;
+        let paymentVerified = false;
+        let checkInterval;
+
+        // Update timer display
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('payment-timer').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                clearInterval(checkInterval);
+                alert('Payment time has expired. Please try again.');
+                window.location.href = "/checkout";
+            }
+            timeLeft--;
+        }
+
+        // Check payment status
+        function checkPaymentStatus() {
+            fetch(`/check_payment/${paymentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.status === 'paid') {
+                        paymentVerified = true;
+                        clearInterval(timerInterval);
+                        clearInterval(checkInterval);
+
+                        // Show success message
+                        document.getElementById('payment-status').classList.add('success');
+                        document.getElementById('payment-timer').style.display = 'none';
+                        document.getElementById('cancel-btn').style.display = 'none';
+
+                        // Redirect to orders after 5 seconds
+                        setTimeout(() => {
+                            window.location.href = "/orders";
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking payment status:', error);
+                });
+        }
+
+        // Start timer
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Start checking payment status every 5 seconds
+        checkInterval = setInterval(checkPaymentStatus, 5000);
+        checkPaymentStatus(); // Initial check
+
+        // Cancel button
+        document.getElementById('cancel-btn').addEventListener('click', function () {
+            if (confirm('Are you sure you want to cancel this payment?')) {
+                clearInterval(timerInterval);
+                clearInterval(checkInterval);
+                window.location.href = "/checkout";
+            }
+        });
+    </script>
+</body>
+
+</html>
