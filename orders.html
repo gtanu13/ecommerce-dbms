@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | TechNest</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h2>Your Orders</h2>
+    <ul>
+        {% for order in orders %}
+        <li>
+            {% if session.user_type == 'seller' %}
+            <strong>{{ order.buyer }}</strong> ordered <strong>{{ order.name }}</strong> (x{{ order.quantity }}) on
+            {{ order.created_at }}
+            {% else %}
+            Ordered <strong>{{ order.name }}</strong> (x{{ order.quantity }}) on {{ order.created_at }} — Status:
+            {{ order.payment_status }}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="/{{ 'seller' if session.user_type == 'seller' else 'buyer' }}">Back</a>
+</body>
+
+</html>

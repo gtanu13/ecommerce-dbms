@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | TechNest</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            border: 2px solid orangered;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .register-box input,
+        .register-box select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .register-box button {
+            width: 100%;
+            padding: 10px;
+            background-color: orangered;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .register-box button:hover {
+            background-color: #d84315;
+        }
+
+        .register-box a {
+            text-decoration: none;
+            color: #4A90E2;
+        }
+
+        .register-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Style for register box container */
+        .register-box {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container register-box">
+        <h2>Register</h2>
+        <form method="post">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <select name="user_type">
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+            </select><br>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </div>
+</body>
+
+</html>

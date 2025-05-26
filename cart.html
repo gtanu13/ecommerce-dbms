@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | TechNest</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h2>Your Cart</h2>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.name }} - ₹{{ item.price }} × {{ item.quantity }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Total: ₹{{ total }}</strong></p>
+    <form action="/checkout" method="post">
+        <button type="submit">Proceed to Pay with Razorpay</button>
+    </form>
+    <a href="/buyer">Continue Shopping</a>
+</body>
+
+</html>
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>

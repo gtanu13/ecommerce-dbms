@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard | TechNest</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welcome, {{ session.username }} | <a href="/logout">Logout</a></h1>
+    </header>
+    <main>
+        <h2>Add New Product</h2>
+        <form method="post" action="/add_product">
+            <input type="text" name="name" placeholder="Product Name" required><br>
+            <input type="text" name="description" placeholder="Description" required><br>
+            <input type="text" name="price" placeholder="Price" required><br>
+            <input type="text" name="category" placeholder="Category" required><br>
+            <input type="text" name="image" placeholder="Image URL" required><br>
+            <button type="submit">Add Product</button>
+        </form>
+
+        <h2>My Products</h2>
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <img src="{{ product.image }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>₹{{ product.price }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+
+</html>
+
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
